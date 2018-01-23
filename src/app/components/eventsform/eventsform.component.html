@@ -1,0 +1,59 @@
+<div class="container">
+  <form class="mt-5" #form="ngForm" novalidate (ngSubmit)="onSubmit(form)">
+    <div class="form-group">
+      <label>Name</label>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="user.name"
+        name="name"
+        #nameValue="ngModel"
+        required
+      >
+      <div class="alert alert-danger mt-2"
+           *ngIf="nameValue.errors?.required && nameValue.touched"
+      >Name must be not empty</div>
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="user.email"
+        name="email"
+        #emailValue="ngModel"
+        email
+        required
+      >
+      <div class="alert alert-danger mt-2"
+           *ngIf="emailValue.errors?.required && emailValue.touched"
+      >Email must be not empty </div>
+      <div class="alert alert-danger mt-2"
+           *ngIf="!emailValue.errors?.required && emailValue.invalid"
+      >Email example : example@exapmle.com</div>
+    </div>
+    <button [disabled]="form.invalid" type="submit" class="btn btn-success">Save</button>
+  </form>
+
+  <table class="table mt-4" *ngIf="users.length">
+    <tr *ngFor="let user of users; let i = index">
+      <td>{{ i+1 }}</td>
+      <td>
+        <span *ngIf="!user.editing">{{ user.name }}</span>
+        <input type="text" class="form-control" *ngIf="user.editing" [(ngModel)]="user.name" >
+      </td>
+      <td>
+        <span *ngIf="!user.editing">{{ user.email }}</span>
+        <input type="text" class="form-control" *ngIf="user.editing" [(ngModel)]="user.email">
+      </td>
+      <td>
+        <button class="btn btn-danger" (click)="removeUser(i)">Delete</button>
+      </td>
+      <td>
+        <button class="btn btn-primary" *ngIf="!user.editing" (click)="editTodo(i)">Edit</button>
+        <button class="btn btn-primary" *ngIf="user.editing" (click)="editTodo(i)">Set</button>
+      </td>
+    </tr>
+  </table>
+</div>
